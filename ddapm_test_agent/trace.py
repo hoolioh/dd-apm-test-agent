@@ -492,7 +492,7 @@ def _verify_v07_payload(data: Any) -> v04TracePayload:
     traces: List[List[Span]] = []
     for chunk in data["chunks"]:
         traces.append(_verify_v07_chunk(chunk))
-    return cast(v04TracePayload, data)
+    return cast(v04TracePayload, traces)
 
 
 def _verify_v07_chunk(chunk: Any) -> List[Span]:
