@@ -21,7 +21,10 @@ def _add_agent_url_arg(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--agent-url",
         type=str,
-        default=os.environ.get("DD_TRACE_AGENT_URL", os.environ.get("DD_AGENT_URL", "http://localhost:8126"),),
+        default=os.environ.get(
+            "DD_TRACE_AGENT_URL",
+            os.environ.get("DD_AGENT_URL", "http://localhost:8126"),
+        ),
         help=("Test agent URL. Default is http://localhost:8126"),
     )
 
@@ -50,7 +53,8 @@ def main_session_start() -> None:
 def main_snapshot() -> None:
     """Entrypoint for the snapshot command"""
     parser = argparse.ArgumentParser(
-        description=("Perform a snapshot test for the data received in the session."), prog="ddapm-test-agent-snapshot",
+        description=("Perform a snapshot test for the data received in the session."),
+        prog="ddapm-test-agent-snapshot",
     )
     _add_agent_url_arg(parser)
     _add_token_arg(parser)

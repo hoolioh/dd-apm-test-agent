@@ -93,6 +93,7 @@ Trace = List[Span]
 v04TracePayload = List[List[Span]]
 TraceMap = OrderedDict[int, Trace]
 
+
 # TODO:ban add extra tags to add to the span
 # TODO:ban warn about dropping metastruct
 def verify_span(d: Any) -> Span:
@@ -240,7 +241,10 @@ def dfs_order_with_depth(trace: Trace) -> Generator[Tuple[Span, int], None, None
         children = [(_, depth) for _ in cmap[c["span_id"]]] + children
 
 
-def pprint_trace(trace: Trace, fmt: Union[str, Callable[[Span], str]],) -> str:
+def pprint_trace(
+    trace: Trace,
+    fmt: Union[str, Callable[[Span], str]],
+) -> str:
     cmap = child_map(trace)
     stack: List[Tuple[str, str, Span]] = [("", "", root_span(trace))]
     s = ""
@@ -448,7 +452,7 @@ def decode_v05(data: bytes) -> v04TracePayload:
 
 
 def decode_v07(data: bytes) -> v04TracePayload:
-    """ Decode a v07 trace payload.
+    """Decode a v07 trace payload.
     The v07 format is almost the same as the v04 format, but the there is some
     extra structure to the payload.
 

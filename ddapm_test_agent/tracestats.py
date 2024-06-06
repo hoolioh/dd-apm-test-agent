@@ -60,9 +60,16 @@ def decode_v06(data: bytes) -> v06StatsPayload:
             )
             stats.append(stat)
 
-        bucket = StatsBucket(Start=raw_bucket["Start"], Duration=raw_bucket["Duration"], Stats=stats,)
+        bucket = StatsBucket(
+            Start=raw_bucket["Start"],
+            Duration=raw_bucket["Duration"],
+            Stats=stats,
+        )
         stats_buckets.append(bucket)
 
     return v06StatsPayload(
-        Hostname=payload.get("Hostname"), Env=payload.get("Env"), Version=payload.get("Version"), Stats=stats_buckets,
+        Hostname=payload.get("Hostname"),
+        Env=payload.get("Env"),
+        Version=payload.get("Version"),
+        Stats=stats_buckets,
     )

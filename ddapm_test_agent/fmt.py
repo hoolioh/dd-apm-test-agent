@@ -34,10 +34,15 @@ def main(args: Optional[List[str]] = None) -> None:
     if args is None:
         args = sys.argv[1:]
     parser = argparse.ArgumentParser(
-        description="Datadog APM Test Agent Snapshot Formatter", prog="ddapm-test-agent-fmt",
+        description="Datadog APM Test Agent Snapshot Formatter",
+        prog="ddapm-test-agent-fmt",
     )
     parser.add_argument(
-        "-v", "--version", action="store_true", dest="version", help="Print version info and exit.",
+        "-v",
+        "--version",
+        action="store_true",
+        dest="version",
+        help="Print version info and exit.",
     )
     parser.add_argument(
         "-c",
@@ -53,7 +58,11 @@ def main(args: Optional[List[str]] = None) -> None:
         help="Set the log level. DEBUG, INFO, WARNING, ERROR, CRITICAL.",
     )
     parser.add_argument(
-        "files", metavar="FILE", type=str, nargs="+", help="Specific snapshot files or directories to format.",
+        "files",
+        metavar="FILE",
+        type=str,
+        nargs="+",
+        help="Specific snapshot files or directories to format.",
     )
 
     parsed_args = parser.parse_args(args=args)

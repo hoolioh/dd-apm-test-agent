@@ -74,7 +74,12 @@ class RemoteConfigServer:
                 )
             ],
             "targets": str(base64.b64encode(bytes(json.dumps(data), encoding="utf-8")), encoding="utf-8"),
-            "target_files": [{"path": path, "raw": str(base64.b64encode(msg_enc), encoding="utf-8"),}],
+            "target_files": [
+                {
+                    "path": path,
+                    "raw": str(base64.b64encode(msg_enc), encoding="utf-8"),
+                }
+            ],
             "client_configs": [path],
         }
         return remote_config_payload
