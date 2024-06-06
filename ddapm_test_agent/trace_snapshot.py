@@ -197,21 +197,15 @@ def _diff_spans(
     """
     results = []
     s1_no_tags = cast(
-        Dict[str, TopLevelSpanValue],
-        {k: v for k, v in s1.items() if k not in ("meta", "metrics", "span_links")},
+        Dict[str, TopLevelSpanValue], {k: v for k, v in s1.items() if k not in ("meta", "metrics", "span_links")},
     )
     s2_no_tags = cast(
-        Dict[str, TopLevelSpanValue],
-        {k: v for k, v in s2.items() if k not in ("meta", "metrics", "span_links")},
+        Dict[str, TopLevelSpanValue], {k: v for k, v in s2.items() if k not in ("meta", "metrics", "span_links")},
     )
     for d1, d2, ignored in [
         (s1_no_tags, s2_no_tags, ignored),
         (s1["meta"], s2["meta"], set(i[5:] for i in ignored if i.startswith("meta."))),
-        (
-            s1["metrics"],
-            s2["metrics"],
-            set(i[8:] for i in ignored if i.startswith("metrics.")),
-        ),
+        (s1["metrics"], s2["metrics"], set(i[8:] for i in ignored if i.startswith("metrics.")),),
     ]:
         d1 = cast(Dict[str, Any], d1)
         d2 = cast(Dict[str, Any], d2)
@@ -226,14 +220,8 @@ def _diff_spans(
         results[0].append("span_links")
     else:
         for l1, l2 in zip(s1.get("span_links") or [], s2.get("span_links") or []):
-            l1_no_tags = cast(
-                Dict[str, TopLevelSpanValue],
-                {k: v for k, v in l1.items() if k != "attributes"},
-            )
-            l2_no_tags = cast(
-                Dict[str, TopLevelSpanValue],
-                {k: v for k, v in l2.items() if k != "attributes"},
-            )
+            l1_no_tags = cast(Dict[str, TopLevelSpanValue], {k: v for k, v in l1.items() if k != "attributes"},)
+            l2_no_tags = cast(Dict[str, TopLevelSpanValue], {k: v for k, v in l2.items() if k != "attributes"},)
             link_diff = []
             for d1, d2, ignored in [
                 (l1_no_tags, l2_no_tags, set(i[11:] for i in ignored if i.startswith("span_links."))),
