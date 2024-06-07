@@ -137,8 +137,8 @@ async def _forward_request(
             assert resp.status == 200, f"Request to agent unsuccessful, received [{resp.status}] response."
 
             if "text/plain" in resp.content_type:
-                raw_response_data = await resp.text()
-                log.info("Response %r from agent:", raw_response_data)
+                response_data = await resp.text()
+                log.info("Response %r from agent:", response_data)
             else:
                 raw_response_data = await resp.read()
                 if len(raw_response_data) == 0:
@@ -153,7 +153,7 @@ async def _forward_request(
                         log.warning("Original Request: %r", request_data)
                         response_data = ""
                     log.info("Response %r from agent:", response_data)
-            return resp, raw_response_data
+            return resp, response_data
 
 
 async def _prepare_and_send_request(data: bytes, request: Request, headers: Mapping[str, str]) -> web.Response:
@@ -166,11 +166,11 @@ async def _prepare_and_send_request(data: bytes, request: Request, headers: Mapp
     log.info("Forwarding request to agent at %r", full_agent_url)
     log.debug(f"Using headers: {headers}")
 
-    client_response = await _forward_request(data, headers, full_agent_url)
+    (client_response, body) = await _forward_request(data, headers, full_agent_url)
     return web.Response(
         status=client_response.status,
         headers=client_response.headers,
-        body="",
+        body=body,
     )
 
 
