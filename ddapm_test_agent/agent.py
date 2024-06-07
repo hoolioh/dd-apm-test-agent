@@ -125,7 +125,9 @@ async def handle_exception_middleware(request: Request, handler: _Handler) -> we
         return web.HTTPBadRequest(reason=str(e))
 
 
-async def _forward_request(request_data: bytes, headers: Mapping[str, str], full_agent_url: str) -> ClientResponse:
+async def _forward_request(
+    request_data: bytes, headers: Mapping[str, str], full_agent_url: str
+) -> tuple[ClientResponse, str]:
     async with ClientSession() as session:
         async with session.post(
             full_agent_url,
@@ -134,7 +136,10 @@ async def _forward_request(request_data: bytes, headers: Mapping[str, str], full
         ) as resp:
             assert resp.status == 200, f"Request to agent unsuccessful, received [{resp.status}] response."
 
-            if "text/html" in resp.content_type:
+            if "text/plain" in resp.content_type:
+                raw_response_data = await resp.text()
+                log.info("Response %r from agent:", raw_response_data)
+            else:
                 raw_response_data = await resp.read()
                 if len(raw_response_data) == 0:
                     log.info("Received empty response: %r from agent.", raw_response_data)
@@ -148,11 +153,7 @@ async def _forward_request(request_data: bytes, headers: Mapping[str, str], full
                         log.warning("Original Request: %r", request_data)
                         response_data = ""
                     log.info("Response %r from agent:", response_data)
-            elif "text/plain" in resp.content_type:
-                log.info("Response %r from agent:", await resp.text())
-            else:
-                log.info("Response %r from agent:", await resp.json())
-            return resp
+            return resp, raw_response_data
 
 
 async def _prepare_and_send_request(data: bytes, request: Request, headers: Mapping[str, str]) -> web.Response:
