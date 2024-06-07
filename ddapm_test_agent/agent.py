@@ -169,7 +169,7 @@ async def _prepare_and_send_request(data: bytes, request: Request, headers: Mapp
     return web.Response(
         status=client_response.status,
         headers=client_response.headers,
-        body=await client_response.read(),
+        body="",
     )
 
 
