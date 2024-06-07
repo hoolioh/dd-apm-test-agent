@@ -147,7 +147,7 @@ async def _forward_request(
                     if isinstance(raw_response_data, bytes):
                         response_data = raw_response_data.decode()
                     try:
-                        response_data = json.loads(raw_response_data)
+                        response_data = json.dumps(json.loads(raw_response_data))
                     except json.JSONDecodeError as e:
                         log.warning("Error decoding response data: %s, data=%r", str(e), response_data)
                         log.warning("Original Request: %r", request_data)
